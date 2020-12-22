@@ -1,4 +1,4 @@
-package io.rebloom.client;
+package com.redislabs.bloom.utils;
 
 import redis.clients.jedis.Protocol;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static io.rebloom.client.Keywords.*;
+import static com.redislabs.bloom.utils.Keywords.*;
 
 public class InsertOptions {
     private final List<byte[]> options = new ArrayList<>();

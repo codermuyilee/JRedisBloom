@@ -1,5 +1,7 @@
 package io.rebloom.client;
 
+import com.redislabs.bloom.filter.BloomFilter;
+import com.redislabs.bloom.utils.InsertOptions;
 import org.junit.Before;
 import org.junit.Test;
 import redis.clients.jedis.exceptions.JedisDataException;
@@ -25,11 +27,11 @@ public class ClientTest {
         }
     }
 
-    Client cl = null;
+    BloomFilter cl = null;
 
     @Before
     public void clearDb() {
-        cl = new Client("localhost", port);
+        cl = new BloomFilter("localhost", port);
         cl._conn().flushDB();
     }
 
@@ -114,26 +116,26 @@ public class ClientTest {
 
     @Test
     public void testExample() {
-        Client client = cl;
+        BloomFilter bloomFilter = cl;
         // Simple bloom filter using default module settings
-        client.add("simpleBloom", "Mark");
+        bloomFilter.add("simpleBloom", "Mark");
         // Does "Mark" now exist?
-        client.exists("simpleBloom", "Mark"); // true
-        client.exists("simpleBloom", "Farnsworth"); // False
+        bloomFilter.exists("simpleBloom", "Mark"); // true
+        bloomFilter.exists("simpleBloom", "Farnsworth"); // False
 
         // If you have a long list of items to check/add, you can use the
         // "multi" methods
 
-        client.addMulti("simpleBloom", "foo", "bar", "baz", "bat", "bag");
+        bloomFilter.addMulti("simpleBloom", "foo", "bar", "baz", "bat", "bag");
 
         // Check if they exist:
-        boolean[] rv = client.existsMulti("simpleBloom", "foo", "bar", "baz", "bat", "Mark", "nonexist");
+        boolean[] rv = bloomFilter.existsMulti("simpleBloom", "foo", "bar", "baz", "bat", "Mark", "nonexist");
         // All items except the last one will be 'true'
         assertEquals(Arrays.toString(new boolean[]{true, true, true, true, true, false}), Arrays.toString(rv));
 
         // Reserve a "customized" bloom filter
-        client.createFilter("specialBloom", 10000, 0.0001);
-        client.add("specialBloom", "foo");
+        bloomFilter.createFilter("specialBloom", 10000, 0.0001);
+        bloomFilter.add("specialBloom", "foo");
     }
    
     @Test

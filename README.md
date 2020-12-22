@@ -58,43 +58,43 @@ and
 
 ## Usage example
 
-Initializing the client:
+Initializing the bloomFilter:
 
 ```java
-import io.rebloom.client.Client
+import com.redislabs.bloom.filter.BloomFilter
 
-Client client = new Client("localhost", 6378);
+Client bloomFilter = new Client("localhost", 6378);
 ```
 
 Adding items to a bloom filter (created using default settings):
 
 ```java
-client.add("simpleBloom", "Mark");
+bloomFilter.add("simpleBloom", "Mark");
 // Does "Mark" now exist?
-client.exists("simpleBloom", "Mark"); // true
-client.exists("simpleBloom", "Farnsworth"); // False
+bloomFilter.exists("simpleBloom", "Mark"); // true
+bloomFilter.exists("simpleBloom", "Farnsworth"); // False
 ```
 
 
 Use multi-methods to add/check multiple items at once:
 
 ```java
-client.addMulti("simpleBloom", "foo", "bar", "baz", "bat", "bag");
+bloomFilter.addMulti("simpleBloom", "foo", "bar", "baz", "bat", "bag");
 
 // Check if they exist:
-boolean[] rv = client.existsMulti("simpleBloom", "foo", "bar", "baz", "bat", "mark", "nonexist");
+boolean[] rv = bloomFilter.existsMulti("simpleBloom", "foo", "bar", "baz", "bat", "mark", "nonexist");
 ```
 
 Reserve a customized bloom filter:
 
 ```java
-client.createFilter("specialBloom", 10000, 0.0001);
-client.add("specialBloom", "foo");
+bloomFilter.createFilter("specialBloom", 10000, 0.0001);
+bloomFilter.add("specialBloom", "foo");
 
 ```
 
-Use cluster client to call redis cluster
-Initializing the cluster client:
+Use cluster bloomFilter to call redis cluster
+Initializing the cluster bloomFilter:
 ```java
 Set<HostAndPort> jedisClusterNodes = new HashSet<>();
 jedisClusterNodes.add(new HostAndPort("localhost", 7000));

@@ -1,5 +1,9 @@
-package io.rebloom.client;
+package com.redislabs.bloom.filter;
 
+import io.rebloom.client.Command;
+import com.redislabs.bloom.utils.InsertOptions;
+import com.redislabs.bloom.utils.Keywords;
+import com.redislabs.bloom.utils.TopKCommand;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.*;
 import redis.clients.jedis.Client;
@@ -18,77 +22,77 @@ import java.util.HashMap;
 /**
  * @author TommyYang on 2018/12/17
  */
-public class ClusterClient extends JedisCluster {
+public class BloomClusterFilter extends JedisCluster {
 
-    public ClusterClient(HostAndPort node) {
+    public BloomClusterFilter(HostAndPort node) {
         super(node);
     }
 
-    public ClusterClient(HostAndPort node, int timeout) {
+    public BloomClusterFilter(HostAndPort node, int timeout) {
         super(node, timeout);
     }
 
-    public ClusterClient(HostAndPort node, int timeout, int maxAttempts) {
+    public BloomClusterFilter(HostAndPort node, int timeout, int maxAttempts) {
         super(node, timeout, maxAttempts);
     }
 
-    public ClusterClient(HostAndPort node, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(HostAndPort node, GenericObjectPoolConfig poolConfig) {
         super(node, poolConfig);
     }
 
-    public ClusterClient(HostAndPort node, int timeout, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(HostAndPort node, int timeout, GenericObjectPoolConfig poolConfig) {
         super(node, timeout, poolConfig);
     }
 
-    public ClusterClient(HostAndPort node, int timeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(HostAndPort node, int timeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
         super(node, timeout, maxAttempts, poolConfig);
     }
 
-    public ClusterClient(HostAndPort node, int connectionTimeout, int soTimeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(HostAndPort node, int connectionTimeout, int soTimeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
         super(node, connectionTimeout, soTimeout, maxAttempts, poolConfig);
     }
 
-    public ClusterClient(HostAndPort node, int connectionTimeout, int soTimeout, int maxAttempts, String password, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(HostAndPort node, int connectionTimeout, int soTimeout, int maxAttempts, String password, GenericObjectPoolConfig poolConfig) {
         super(node, connectionTimeout, soTimeout, maxAttempts, password, poolConfig);
     }
 
-    public ClusterClient(HostAndPort node, int connectionTimeout, int soTimeout, int maxAttempts, String password, String clientName, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(HostAndPort node, int connectionTimeout, int soTimeout, int maxAttempts, String password, String clientName, GenericObjectPoolConfig poolConfig) {
         super(node, connectionTimeout, soTimeout, maxAttempts, password, clientName, poolConfig);
     }
 
-    public ClusterClient(Set<HostAndPort> nodes) {
+    public BloomClusterFilter(Set<HostAndPort> nodes) {
         super(nodes);
     }
 
-    public ClusterClient(Set<HostAndPort> nodes, int timeout) {
+    public BloomClusterFilter(Set<HostAndPort> nodes, int timeout) {
         super(nodes, timeout);
     }
 
-    public ClusterClient(Set<HostAndPort> nodes, int timeout, int maxAttempts) {
+    public BloomClusterFilter(Set<HostAndPort> nodes, int timeout, int maxAttempts) {
         super(nodes, timeout, maxAttempts);
     }
 
-    public ClusterClient(Set<HostAndPort> nodes, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(Set<HostAndPort> nodes, GenericObjectPoolConfig poolConfig) {
         super(nodes, poolConfig);
     }
 
-    public ClusterClient(Set<HostAndPort> nodes, int timeout, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(Set<HostAndPort> nodes, int timeout, GenericObjectPoolConfig poolConfig) {
         super(nodes, timeout, poolConfig);
     }
 
-    public ClusterClient(Set<HostAndPort> jedisClusterNode, int timeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(Set<HostAndPort> jedisClusterNode, int timeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
         super(jedisClusterNode, timeout, maxAttempts, poolConfig);
     }
 
-    public ClusterClient(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout, int maxAttempts, GenericObjectPoolConfig poolConfig) {
         super(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, poolConfig);
     }
 
-    public ClusterClient(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout, int maxAttempts, String password, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout, int maxAttempts, String password, GenericObjectPoolConfig poolConfig) {
         super(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password, poolConfig);
     }
 
-    public ClusterClient(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout, int maxAttempts, String password, String clientName, GenericObjectPoolConfig poolConfig) {
+    public BloomClusterFilter(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout, int maxAttempts, String password, String clientName, GenericObjectPoolConfig poolConfig) {
         super(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password, clientName, poolConfig);
     }
 
@@ -151,7 +155,7 @@ public class ClusterClient extends JedisCluster {
      * add one or more items to the bloom filter, by default creating it if it does not yet exist
      *
      * @param name The name of the filter
-     * @param options {@link io.rebloom.client.InsertOptions}
+     * @param options {@link InsertOptions}
      * @param items items to add to the filter
      * @return
      */

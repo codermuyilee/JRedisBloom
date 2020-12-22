@@ -1,11 +1,12 @@
 package io.rebloom.client;
 
+import com.redislabs.bloom.filter.BloomClusterFilter;
+import com.redislabs.bloom.utils.InsertOptions;
 import junit.framework.TestCase;
 
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import redis.clients.jedis.ClusterReset;
@@ -27,10 +28,10 @@ import static org.junit.Assert.assertThrows;
 /**
  * @author TommyYang on 2018/12/17
  */
-public class ClusterClientTest {
+public class ClusterBloomFilterTest {
 
 
-    private ClusterClient ccl = null;
+    private BloomClusterFilter ccl = null;
 
     private final static HostAndPort nodeInfo1 = new HostAndPort("127.0.0.1", 7379);
     private final static HostAndPort nodeInfo2 = new HostAndPort("127.0.0.1", 7380);
@@ -90,7 +91,7 @@ public class ClusterClientTest {
     public void newCCL() {
         Set<HostAndPort> jedisClusterNodes = new HashSet<>();
         jedisClusterNodes.add(new HostAndPort("127.0.0.1", 7379));
-        ccl = new ClusterClient(jedisClusterNodes);
+        ccl = new BloomClusterFilter(jedisClusterNodes);
 
         node1.flushDB();
         node2.flushDB();

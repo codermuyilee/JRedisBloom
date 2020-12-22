@@ -1,4 +1,4 @@
-package io.rebloom.client;
+package com.redislabs.bloom.utils;
 
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.util.SafeEncoder;

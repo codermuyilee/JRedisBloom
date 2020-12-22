@@ -1,12 +1,16 @@
-package io.rebloom.client;
+package com.redislabs.bloom.filter;
 
+import com.redislabs.bloom.utils.Command;
+import com.redislabs.bloom.utils.InsertOptions;
+import com.redislabs.bloom.utils.Keywords;
+import com.redislabs.bloom.utils.TopKCommand;
+import com.redislabs.client.base.Client;
 import redis.clients.jedis.*;
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.Pool;
 import redis.clients.jedis.util.SafeEncoder;
 
-import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,18 +18,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Client is the main ReBloom client class, wrapping connection management and all ReBloom commands
+ * BloomFilter is the main ReBloom client class, wrapping connection management and all ReBloom commands
  */
-public class Client implements Closeable {
-    private final Pool<Jedis> pool;
+public class BloomFilter extends Client {
+
 
     /**
      * Create a new client to ReBloom
      *
      * @param pool Jedis connection pool to be used
      */
-    public Client(Pool<Jedis> pool) {
-        this.pool = pool;
+    public BloomFilter(Pool<Jedis> pool) {
+        super(pool);
     }
 
 
@@ -37,22 +41,11 @@ public class Client implements Closeable {
      * @param timeout  connection timeout
      * @param poolSize the poolSize of JedisPool
      */
-    public Client(String host, int port, int timeout, int poolSize, String password) {
-        JedisPoolConfig conf = new JedisPoolConfig();
-        conf.setMaxTotal(poolSize);
-        conf.setTestOnBorrow(false);
-        conf.setTestOnReturn(false);
-        conf.setTestOnCreate(false);
-        conf.setTestWhileIdle(false);
-        conf.setMinEvictableIdleTimeMillis(60000);
-        conf.setTimeBetweenEvictionRunsMillis(30000);
-        conf.setNumTestsPerEvictionRun(-1);
-        conf.setFairness(true);
-
-        pool = new JedisPool(conf, host, port, timeout, password);
+    public BloomFilter(String host, int port, int timeout, int poolSize, String password) {
+       super(host,port,timeout,poolSize,password);
     }
 
-    public Client(String host, int port, String password) {
+    public BloomFilter(String host, int port, String password) {
         this(host, port, 500, 100, password);
     }
 
@@ -62,7 +55,7 @@ public class Client implements Closeable {
      * @param host the redis host
      * @param port the redis port
      */
-    public Client(String host, int port) {
+    public BloomFilter(String host, int port) {
         this(host, port, 500, 100, null);
     }
 
@@ -113,7 +106,7 @@ public class Client implements Closeable {
      * add one or more items to the bloom filter, by default creating it if it does not yet exist
      *
      * @param name    The name of the filter
-     * @param options {@link io.rebloom.client.InsertOptions}
+     * @param options {@link InsertOptions}
      * @param items   items to add to the filter
      * @return
      */
@@ -352,25 +345,5 @@ public class Client implements Closeable {
         }
     }
 
-    @Override
-    public void close() {
-        this.pool.close();
-    }
 
-    Jedis _conn() {
-        return pool.getResource();
-    }
-
-    private Connection sendCommand(Jedis conn, String key, ProtocolCommand command, String... args) {
-        byte[][] fullArgs = new byte[args.length + 1][];
-        fullArgs[0] = SafeEncoder.encode(key);
-        System.arraycopy(SafeEncoder.encodeMany(args), 0, fullArgs, 1, args.length);
-        return sendCommand(conn, command, fullArgs);
-    }
-
-    private Connection sendCommand(Jedis conn, ProtocolCommand command, byte[]... args) {
-        Connection client = conn.getClient();
-        client.sendCommand(command, args);
-        return client;
-    }
 }

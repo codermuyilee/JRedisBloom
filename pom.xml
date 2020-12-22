@@ -9,7 +9,7 @@
     <version>2.1.0-SNAPSHOT</version>
     
     <name>JReBloom</name>
-	<description>Official client for ReBloom</description>
+	<description>Official bloomFilter for ReBloom</description>
 	<url>https://oss.redislabs.com/rebloom</url>
 
 	<organization>
