@@ -82,4 +82,16 @@ public class Client implements Closeable {
         client.sendCommand(command, args);
         return client;
     }
+
+    /**
+     * Remove the filter
+     *
+     * @param name
+     * @return true if delete the filter, false is not delete the filter
+     */
+    public boolean delete(String name) {
+        try (Jedis conn = _conn()) {
+            return conn.del(name) != 0;
+        }
+    }
 }

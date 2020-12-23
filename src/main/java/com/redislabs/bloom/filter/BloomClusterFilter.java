@@ -1,6 +1,6 @@
 package com.redislabs.bloom.filter;
 
-import io.rebloom.client.Command;
+import com.redislabs.bloom.utils.Command;
 import com.redislabs.bloom.utils.InsertOptions;
 import com.redislabs.bloom.utils.Keywords;
 import com.redislabs.bloom.utils.TopKCommand;

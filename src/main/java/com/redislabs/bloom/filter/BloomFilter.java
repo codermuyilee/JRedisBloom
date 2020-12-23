@@ -5,8 +5,8 @@ import com.redislabs.bloom.utils.InsertOptions;
 import com.redislabs.bloom.utils.Keywords;
 import com.redislabs.bloom.utils.TopKCommand;
 import com.redislabs.client.base.Client;
-import redis.clients.jedis.*;
-import redis.clients.jedis.commands.ProtocolCommand;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.Pool;
 import redis.clients.jedis.util.SafeEncoder;
@@ -42,7 +42,7 @@ public class BloomFilter extends Client {
      * @param poolSize the poolSize of JedisPool
      */
     public BloomFilter(String host, int port, int timeout, int poolSize, String password) {
-       super(host,port,timeout,poolSize,password);
+        super(host, port, timeout, poolSize, password);
     }
 
     public BloomFilter(String host, int port, String password) {
@@ -205,18 +205,6 @@ public class BloomFilter extends Client {
 
     public boolean[] existsMulti(String name, String... values) {
         return sendMultiCommand(Command.MEXISTS, SafeEncoder.encode(name), SafeEncoder.encodeMany(values));
-    }
-
-    /**
-     * Remove the filter
-     *
-     * @param name
-     * @return true if delete the filter, false is not delete the filter
-     */
-    public boolean delete(String name) {
-        try (Jedis conn = _conn()) {
-            return conn.del(name) != 0;
-        }
     }
 
     /**
