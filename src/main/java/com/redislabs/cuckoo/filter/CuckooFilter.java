@@ -5,6 +5,7 @@ import com.redislabs.bloom.utils.Keywords;
 import com.redislabs.client.base.Client;
 import com.redislabs.cuckoo.utils.Command;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.Pool;
@@ -41,6 +42,11 @@ public class CuckooFilter extends Client {
      */
     public CuckooFilter(String host, int port, int timeout, int poolSize, String password) {
         super(host, port, timeout, poolSize, password);
+    }
+
+
+    public CuckooFilter(String host, int port, int timeout, JedisPoolConfig conf, String password, int database) {
+        super(host, port, timeout, conf, password, database);
     }
 
     public CuckooFilter(String host, int port, String password) {
@@ -225,7 +231,6 @@ public class CuckooFilter extends Client {
             return sendCommand(conn, Command.DEL, SafeEncoder.encode(name), value).getIntegerReply() != 0;
         }
     }
-
 
 
     /**

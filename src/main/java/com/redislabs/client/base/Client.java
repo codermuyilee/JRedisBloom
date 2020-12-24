@@ -46,6 +46,20 @@ public class Client implements Closeable {
         pool = new JedisPool(conf, host, port, timeout, password);
     }
 
+
+
+    /**
+     * Create a new client to ReBloom
+     *
+     * @param host     the redis host
+     * @param port     the redis port
+     * @param timeout  connection timeout
+     * @param conf the poolSize of JedisPool
+     */
+    public Client(String host, int port, int timeout,  JedisPoolConfig conf, String password,int database) {
+        pool = new JedisPool(conf, host, port, timeout, password,database);
+    }
+
     public Client(String host, int port, String password) {
         this(host, port, 500, 100, password);
     }
